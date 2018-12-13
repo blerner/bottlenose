@@ -18,14 +18,17 @@ $(function (){
       styles.deleteRule(hideOtherComments);
     }
 
-    $("#toggle-comments").change(function() {
-      if ($(this).prop("checked"))
+    var $toggleComments = $("#" + root).find(".toggle-comments");
+    $toggleComments.click(function() {
+      $toggleComments.toggleClass("toggled");
+      if ($(this).hasClass("toggled"))
         showOthers();
       else
         hideOthers();
     });
     if (!showAll) hideOthers();
     $("#" + root).find("textarea.sourceCode").each(function(index, code) {
+      var $toolbar = $(code).prev("div.pdfToolbar");
       if ($(code).data("lang")) {
         var cm = CodeMirror.fromTextArea(code, {
           readOnly: true, indentUnit: 2,
@@ -37,6 +40,10 @@ $(function (){
         if ($(code).data("lang") === "scheme") {
           renderInlineImages(cm, code);
         }
+        $toolbar.find(".wrapLines").click(function() {
+          $(this).toggleClass("toggled");
+          cm.setOption("lineWrapping", $(this).hasClass("toggled"));
+        });
       }
       $(code).addClass("cm-s-mdn-like cm-s-default");
     });
@@ -112,11 +119,7 @@ $(function (){
     var footerHeight = $(".footer").outerHeight() + 4; // adds a bit of padding
     var divSurround = $(".CodeMirror").first().closest(".tab-pane");
     var parentBulk = $(divSurround).outerHeight() - $(divSurround).height();
-    var toggleComments = $("#toggle-comments");
-    var toggleCommentsHeight = 0;
-    if (toggleComments.length > 0) {
-      toggleCommentsHeight = toggleComments.first().closest("p").outerHeight(true);
-    }
+    var toolbarHeight = $("#" + root).find(".pdfToolbar").height();
     var navBar = $("nav.navbar").first();
     if (navBar.length > 0) {
       // Note: this will be overruled in application.scss if the window is resized too narrowly
@@ -138,11 +141,11 @@ $(function (){
       if (vertical) {
         var navBarHeight = $("#" + root).prev(".navbar").outerHeight(true) || 0;
         var codeFraction = 0.8;
-        var codeHeight = (windowHeight - footerHeight - navBarHeight) * codeFraction - parentBulk;
+        var codeHeight = (windowHeight - footerHeight - navBarHeight) * codeFraction - parentBulk - toolbarHeight;
         var filesHeight = (windowHeight - footerHeight - navBarHeight) * (1.0 - codeFraction);
       } else {
-        var codeHeight = windowHeight - footerHeight - parentBulk;
-        var filesHeight = windowHeight - footerHeight - toggleCommentsHeight;
+        var codeHeight = windowHeight - footerHeight - parentBulk - toolbarHeight;
+        var filesHeight = windowHeight - footerHeight;
       }
       var tabbar = $("#" + root).find(".nav-tabs").first();
       var tabbarHeight = 0;

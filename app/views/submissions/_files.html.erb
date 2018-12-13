@@ -94,6 +94,7 @@ div.pdfPages > div.pageContainer > div.regionComments > div.page {
       </div>
       <% else %>
       <div>
+        <%= render 'submissions/files_toolbar' %>
         <%= code_textarea f[:contents],
             id: "contents_#{i}_#{root}",
             class: "sourceCode", 
@@ -152,6 +153,7 @@ div.pdfPages > div.pageContainer > div.regionComments > div.page {
       </div>
       <% else %>
       <div>
+        <%= render 'submissions/files_toolbar' %>
         <%= code_textarea contents,
             id: "contents_#{i}_#{root}",
             class: "sourceCode", 
@@ -254,6 +256,7 @@ div.pdfPages > div.pageContainer > div.regionComments > div.page {
        raise "" if (f[:name].ends_with?(".class") && f[:contents].starts_with?("\xCA\xFE\xBA\xBE"))
        contents = render html: f[:contents] %>
   <div>
+    <%= render 'submissions/files_toolbar' %>
     <%= code_textarea contents,
         id: "contents_#{i}_#{root}",
         class: "sourceCode",

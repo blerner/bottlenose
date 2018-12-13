@@ -41,11 +41,6 @@
   <div class="col-sm-3 files-sidebar-container">
     <div class="files-sidebar">
       <div id="files-all-files" class="files nav treeview condensed"></div>
-      <p>
-        <label>Show other inline comments:
-          <input id="toggle-comments" data-toggle="toggle" data-on="Shown" data-off="Hidden" type="checkbox">
-        </label>
-      </p>
     </div>
   </div>
   <div class="col-sm-9 tab-content">
@@ -77,7 +72,8 @@
         }
       }
     );
-    $("form").submit(ensureValidNumericInputOnSubmit);
+  $("form").submit(ensureValidNumericInputOnSubmit);
+  $("#all-files .toolbarLabel.hidden").removeClass("hidden");
   });
 </script>
 

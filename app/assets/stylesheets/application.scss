@@ -285,6 +285,11 @@ div.regionComments > div:not(.page) span.glyphicon {
 
 div.commentEditor .save-status > .glyphicon { padding: 6px; border-radius: 4px; }
 
+.glyphicon-inverted {
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
 div.regionComments > div.commentEditor {
     z-index: 100;
 }
@@ -492,6 +497,7 @@ li.list-group-item.unvisited {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 div.pdfDisplay[dir='ltr'] .toolbarViewerLeft,
@@ -554,6 +560,19 @@ div.pdfDisplay[dir='rtl'] .splitToolbarButton > .toolbarButton {
 
 .splitToolbarButton.toggled .toolbarButton {
   margin: 0;
+}
+
+.toolbarLabel {
+  min-width: 16px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: hsl(0,0%,85%);
+  font-size: 12px;
+  line-height: 14px;
+  text-align: left;
+  -moz-user-select: none;
+       user-select: none;
+  cursor: default;
 }
 
 .splitToolbarButton:hover > .toolbarButton,
