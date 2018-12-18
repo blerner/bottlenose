@@ -2,13 +2,13 @@ require 'sub_tarball'
 
 class AssignmentsController < ApplicationController
   layout 'course'
-
+  
   before_action :find_course
   before_action -> { find_assignment(params[:id]) }, except: [:index, :new, :create, :edit_weights, :update_weights]
   before_action :require_registered_user
   before_action -> { require_admin_or_prof(course_assignments_path) },
                 only: [:edit, :edit_weights, :update, :update_weights,
-                       :new, :create, :destroy, :recreate_grades]
+                       :new, :create, :destroy, :recreate_grades, :search, :query]
   before_action :require_admin_or_assistant, only: [:update_section_toggles, :tarball, :publish]
 
   def show
@@ -118,6 +118,63 @@ class AssignmentsController < ApplicationController
   def edit_weights
   end
 
+  def search
+  end
+
+  def query
+    @subs = Assignment.find(params[:id]).used_submissions
+            .includes(:user).includes(:upload).includes(:grades).map{|s| [s.id, s]}.to_h
+    @subs.each do |_, s|
+      s.upload.cache_course_assignment_info @course.id, @assignment.id
+    end
+    @grader = Grader.find(params[:grader_id])
+    @teams = Team.where(id: @subs.map{|_, s| s.team_id}).includes(:users).map{|t| [t.id, t]}.to_h
+    @comments = InlineComment
+                .where(submission_id: @subs.keys)
+                .includes(:user)
+                .joins(:grade).where("grades.grader_id": params[:grader_id])
+                .where("comment ILIKE ?", "%#{params[:query]}%")
+    unless params[:severity].blank?
+      @comments = @comments.where(severity: params[:severity])
+    end
+    @comments = @comments.group_by(&:submission_id)
+    @comments = @comments.map do |sub_id, comments|
+      u = @subs[sub_id].user
+      if u
+        u = {id: u.id, display_name: u.display_name, path: user_path(u), profile: u.profile}
+      end
+      t = @teams[@subs[sub_id]&.team_id]
+      if t
+        t = {id: t.id, path: course_teamset_team_path(@course, t.teamset_id, t),
+             sorted_users: t.sorted_users.map do |u|
+               {id: u.id, display_name: u.display_name, path: user_path(u), profile: u.profile}
+             end}
+      end
+      subDirs, _ = @subs[sub_id].get_submission_files(current_user, {}, false)
+      {
+        id: sub_id, user: u, team: t,
+        path: course_assignment_submission_path(@course, @assignment, sub_id),
+        subDirs: subDirs,
+        comments: comments.map(&:to_json).group_by{|h| h[:file]}.map do |k, cs|
+          if k.match?("/extracted/")
+            grade = @subs[sub_id].grades.select{|g| g.grader_id == @grader.id}.first
+            if @grader.autograde?
+              path = course_assignment_submission_grade_path(@course, @assignment, sub_id, grade)
+            else
+              path = edit_course_assignment_submission_grade_path(@course, @assignment, sub_id, grade)
+            end
+            [k.gsub(/^.*\/extracted\//, ""), {comments: cs, path: path}]
+          else
+            ["Submission", {comments: cs}]
+          end
+        end.to_h
+      }
+    end.sort_by{|s| s[:id]}
+    respond_to do |f|
+      f.json { render json: @comments }
+    end
+  end
+  
   def update_weights
     no_problems = true
     params[:weight] = params[:weight] || {}

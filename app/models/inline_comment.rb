@@ -27,6 +27,7 @@ class InlineComment < ApplicationRecord
       comment: self.comment,
       deduction: self.weight,
       suppressed: self.suppressed,
+      weight: self.weight,
       info: self.info
     }
   end

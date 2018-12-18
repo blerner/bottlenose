@@ -95,6 +95,9 @@
   <% end %>
 </div>
   <span style="flex-grow: 1;">&nbsp;</span>  
+  <%= link_to "Search comments",
+      search_course_assignment_path(@course, @gradesheet.assignment), 
+      class: "btn btn-md btn-default" %>
   <button class="btn btn-default collapsed" data-toggle="collapse" disabled
         data-target="#grade-histograms" id="toggle-histograms">
     Show/hide grade histograms

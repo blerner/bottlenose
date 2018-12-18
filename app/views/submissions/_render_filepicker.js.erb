@@ -190,11 +190,14 @@ $(function (){
       if (fileMap[root][index] && fileMap[fileMap[root][index]])
         return fileTrees[root].selectNode(fileMap[fileMap[root][index]]);
     }
+    // NOTE: Directly selecting anything other than the zeroth file
+    // doesn't refresh the page correctly.  So select the zeroth item first,
+    // and then if there's a hash present, activate that item.
+    var ans = selectTreeviewFileByIndex(root, 0);
     if (document.location.hash !== "" && fileMap[document.location.hash] !== undefined) {
-      return selectTreeviewFileByHref(root, document.location.hash);
-    } else {
-      return selectTreeviewFileByIndex(root, 0);
+      ans = selectTreeviewFileByHref(root, document.location.hash);
     }
+    return ans;
   }
   window.activateFileView = activateFileView;
 
@@ -228,6 +231,12 @@ $(function (){
     });
     filesTree.treeview("uncheckNode", filesTree.treeview("getCollapsed")[0]);
     selectTreeviewFileByIndex(root, 0);
+    // NOTE: Directly selecting anything other than the zeroth file
+    // doesn't refresh the page correctly.  So select the zeroth item first,
+    // and then if there's a hash present, activate that item.
+    if (document.location.hash !== "" && fileMap[document.location.hash] !== undefined) {
+      selectTreeviewFileByHref(root, document.location.hash);
+    }
   }
   window.activateFileViewEditing = activateFileViewEditing;
 });

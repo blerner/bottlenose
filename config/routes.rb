@@ -65,6 +65,8 @@ Bottlenose::Application.routes.draw do
       end
       member do
         post 'create_missing_grades' => 'assignments#recreate_grades'
+        get :search
+        post :query
       end
       resources :grader_allocations, only: [] do
         collection do

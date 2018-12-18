@@ -1,0 +1,28 @@
+<% @page_title = "#{@course.name} / #{@assignment.name} / Search" %>
+<style>
+  dt { font-weight: normal; }
+  .submitter { font-weight: bold; }
+  dd mark { padding: 0em; background: lemonchiffon; }
+</style>
+
+<form id="search_query">
+<label>Comment type:
+  <%= select_tag "severity",
+      options_for_select([["Any", ""]] + InlineComment.severities.map{|name, _| [name.humanize, name]}) %>
+</label>
+<label>Grader:
+  <%= select_tag "grader_id",
+      options_for_select(@assignment.graders_ordered.map{|g| [g.to_s, g.id]}) %>
+</label>
+<label>Comment substring:
+  <input type="text" name="query" id="query"/>
+</label>
+
+<button id="submit">Go!</button>
+<script>
+  <%= render "assignments/search.js" %>
+</script>
+</form>
+
+<div id="results">
+</div>

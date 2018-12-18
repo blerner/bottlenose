@@ -1,0 +1,89 @@
+$(function() {
+  const user_link = "<%= escape_javascript(maybe_link_user(true, User.new(profile: '(profile)', id: '(id)', name: '(display_name)'), '(submitter)')) %>";
+  const noProfile = "<%= escape_javascript(user_image(User.new)) %>";
+  var $form = $("#search_query");
+  function linkUser(userData, submitterId) {
+    var markup = user_link
+        .replace(new RegExp('\\(id\\)', 'g'), userData.id)
+        .replace(new RegExp('\\(display_name\\)', 'g'), userData.display_name)
+        .replace(new RegExp('/images/\\(profile\\)', 'g'), userData.profile || noProfile)
+        .replace(new RegExp('\\(submitter\\)', 'g'), userData.id === submitterId ? "submitter" : "");
+    return activateTooltip($(markup));
+  }
+  function findHref(filePath, subData) {
+    if (filePath.length === 0) return "";
+    var piece = filePath.shift();
+    for (var i = 0; i < subData.length; i++) {
+      if (subData[i].text === piece) return subData[i].href;
+      if (subData[i].text === piece + "/") return findHref(filePath, subData[i].nodes);
+    }
+    return "";
+  }
+  $form.submit(function(e) {
+    e.preventDefault();
+    var query = $("#query").val();
+    $.ajax({
+      type: "POST",
+      url: "<%= query_course_assignment_path(@course, @assignment) %>",
+      data: $form.serialize(),
+      dataType: "JSON",
+      timeout: 5000
+    }).done(function(json) {
+      var $results = $("div#results");
+      $results.html("");
+      if (json.length == 0) {
+        $results.append($("<p>").text("No results found"));
+      } else {
+        var $subs = $("<dl>");
+        $results.append($subs);
+        json.forEach(function(data) {
+          console.log(data);
+          var sublink = $("<a>").attr("href", data.path).text("Submission " + data.id);
+          var userlink;
+          if (data.team) {
+            userlink = $("<span>");
+            userlink.append($("<a>").attr("href", data.team.path).text("Team " + data.team.id)).append(" &mdash; ");
+            for (var i = 0; i < data.team.sorted_users.length - 1; i++) {
+              if (i > 0) userlink.append(", ");
+              userlink.append(linkUser(data.team.sorted_users[i], data.user.id));
+            }
+            if (data.team.sorted_users.length > 1)
+              userlink.append(" and ");
+            userlink.append(linkUser(data.team.sorted_users[data.team.sorted_users.length - 1], data.user.id));
+          } else {
+            userlink = linkUser(data.user, data.user.id);
+          }
+          $subs.append($("<dt>").append(sublink).append(" &mdash; ").append(userlink));
+
+          var $comments = $("<dl>");
+          Object.keys(data.comments).sort().forEach(function(file) {
+            var comments = data.comments[file];
+            if (comments.path) {
+              var fileHref = findHref(file.split("/"), data.subDirs);              
+              $comments.append($("<dt>").append(
+                $("<a>").attr("href", comments.path + fileHref + "_all-files").text(file)));
+            } else {
+              $comments.append($("<dt>").text(file));
+            }
+            var renderedComments = $("<ul>");
+            comments.comments.forEach(function(c) {
+              var pieces = c.comment.split(new RegExp(query, 'i'));
+              var line = $("<li>").text("Line " + c.line + ": " + c.label + ", " + c.severity + " [" + c.weight + "]: ");
+              var comment = $("<span>");
+              for (var i = 0; i < pieces.length; i++) {
+                if (i > 0)
+                  comment.append($("<mark>").text(query));
+                comment.append(pieces[i]);
+              }
+              line.append(comment);
+              renderedComments.append(line);
+            });
+            $comments.append($("<dd>").append(renderedComments));
+          });
+          $subs.append($("<dd>").append($comments));
+        });
+      }
+    }).fail(function(jqXHR, status, err) {
+    });
+  });
+});

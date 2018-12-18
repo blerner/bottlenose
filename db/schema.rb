@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2019_03_03_232336) do
     t.float "out_of"
     t.datetime "updated_at"
     t.boolean "available", default: false
+    t.index ["grader_id"], name: "index_grades_on_grader_id"
     t.index ["submission_id"], name: "index_grades_on_submission_id"
   end
 

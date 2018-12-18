@@ -77,10 +77,26 @@ class Upload < ApplicationRecord
     end
     Postprocessor.no_files_found(extracted_path) unless found_any
   end
+
+  # These three methods are only for use in accelerating upload_dir:
+  # there's no good reason why upload_dir needs to query the database
+  # to obtain the course id, in a context where we know it already...
+  # but assigning to the course and assignment attributes will themselves
+  # trigger database access...  This is stupid, but I see no way around it.
+  def cache_course_assignment_info(course_id = nil, assignment_id = nil)
+    @courseId = course_id
+    @assignmentId = assignment_id
+  end
+  def cachedCourseId
+    (@courseId || course&.id).to_i
+  end
+  def cachedAssignmentId
+    (@assignmentId || assignment&.id).to_i
+  end
   
   def upload_dir
     pre = secret_key.slice(0, 2)
-    Upload.base_upload_dir.join(course&.id.to_i.to_s, assignment&.id.to_i.to_s, pre, secret_key)
+    Upload.base_upload_dir.join(cachedCourseId.to_s, cachedAssignmentId.to_s, pre, secret_key)
   end
 
   def path
@@ -147,7 +163,11 @@ class Upload < ApplicationRecord
         end
       end
     end
-    rec_path(extracted_path)
+    if Dir.exists?(extracted_path)
+      rec_path(extracted_path)
+    else
+      {}
+    end
   end
 
   def upload_entries
