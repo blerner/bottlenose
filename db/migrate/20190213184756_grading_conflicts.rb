@@ -1,6 +1,6 @@
 class GradingConflicts < ActiveRecord::Migration[5.2]
   def change
-  	create_table :grading_conflicts do |t|
+    create_table :grading_conflicts do |t|
       t.integer "course_id", null: false
       t.integer "staff_user_id", null: false
       t.integer "student_user_id", null: false
