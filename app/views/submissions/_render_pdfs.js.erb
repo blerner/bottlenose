@@ -167,7 +167,7 @@ $(function() {
       ////////////////////////////////////////
       //////////////////// Zooming
       ////////////////////////////////////////
-      $div.find("#zoomOut").click(function(e) {
+      $div.find("#zoomOut").on("click", function(e) {
         var $scale = $div.find("#scaleSelect");
         var $options = $scale.find("option");
         var newIndex = Math.max($scale[0].selectedIndex - 1, 0);
@@ -175,7 +175,7 @@ $(function() {
         e.stopImmediatePropagation();
         return false;
       });
-      $div.find("#zoomIn").click(function(e) {
+      $div.find("#zoomIn").on("click", function(e) {
         var $scale = $div.find("#scaleSelect");
         var $options = $scale.find("option");
         var newIndex = Math.min($scale[0].selectedIndex + 1, $options.length - 1);
@@ -196,11 +196,11 @@ $(function() {
       //////////////////// Downloading
       ////////////////////////////////////////
       var clickingDownload = false;
-      $div.find("#new_window").click(function(e) {
+      $div.find("#new_window").on("click", function(e) {
         window.open(encodePath($div.data("source")), "_blank");
         e.stopPropagation();
       });
-      $div.find("#download").click(function(e) {
+      $div.find("#download").on("click", function(e) {
         // console.log("Clicking on button");
         var dm = new pdfjsViewer.DownloadManager({});
         dm.downloadUrl(encodePath($div.data("source")), $div.data("alt"));

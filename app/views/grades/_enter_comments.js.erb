@@ -33,7 +33,7 @@ $(function() {
     }
     window.updateScore = updateScore;
 
-    $("form").submit(function(e) {
+    $("form").on("submit", function(e) {
       if (autosavePromise) {
         e.preventDefault();
         alert("Please wait for autosave to complete");

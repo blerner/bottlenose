@@ -23,7 +23,7 @@ gem 'coffee-rails'
 gem 'coffee-rails-source-maps'
 gem 'uglifier'
 gem 'jquery-rails' # needed for general jQuery stuff
-gem 'jquery-ui-rails' # needed specifically for drag-and-drop ability
+gem 'jquery-ui-rails', git: 'https://github.com/kylesferrazza/jquery-ui-rails' # needed specifically for drag-and-drop ability
 gem 'jquery-tablesorter' # needed to allow re-sortable tables
 gem 'cocoon' # used for dynamically generating nested forms
 

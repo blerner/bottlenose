@@ -80,7 +80,7 @@
 <% end %><%# @submission_info.each %>
 
 <script>
-  $(".navbar-header a").click(function(e) { 
+  $(".navbar-header a").on("click", function(e) { 
     window.scrollTo(0, $($(this).attr("href"))[0].offsetTop); 
     e.stopPropagation();
     e.preventDefault();

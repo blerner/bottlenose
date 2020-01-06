@@ -166,7 +166,7 @@
 <% end %><%# form-for %>
 <script>
   <%= render partial: "new_questions.js", locals: {count: @count.to_i} %>
-  $(".navbar-header a").click(function(e) { 
+  $(".navbar-header a").on("click", function(e) { 
     window.scrollTo(0, $($(this).attr("href"))[0].offsetTop); 
     e.stopPropagation();
     e.preventDefault();
@@ -179,7 +179,7 @@
     warning.find("p").removeClass("hidden");
     warning.find("h3").removeClass("hidden");
   }, Math.max(deadline - now, 0));
-  $("form").submit(function(e) {
+  $("form").on("submit", function(e) {
     return ensureValidNumericInputOnSubmit(e, "input.numeric:not([disabled])");
   });
 </script>

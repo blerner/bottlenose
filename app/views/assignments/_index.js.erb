@@ -46,7 +46,7 @@ $(function() {
   var assnNames = $("#assignments-table tbody td:first-child").map(function() { return $(this).text(); }).get();
   var routeToSub = "<%= course_assignment_submission_path(course_id: @course.id, assignment_id: '(aid)', id: '(sid)') %>";
   GoogleCharts.load('corechart', function() {
-    $("#students-table tbody tr").click(function(e) {
+    $("#students-table tbody tr").on("click", function(e) {
       var $p = $(this).find("p");
       if ($(e.target).closest("p")[0] != $p[0]) { $p.toggleClass("hidden"); }
       var grades = $p.data("grades");

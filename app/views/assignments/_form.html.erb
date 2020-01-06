@@ -21,6 +21,6 @@
     </div>
   </div>
   <script>
-    $(function() { $("a[href='#type-<%= @assignment.type.downcase %>']").click(); });
+    $(function() { $("a[href='#type-<%= @assignment.type.downcase %>']").trigger("click"); });
   </script>
 </div>

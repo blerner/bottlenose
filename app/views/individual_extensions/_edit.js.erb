@@ -16,7 +16,7 @@ $(function() {
       $("#sucess_" + $form.find("input[name='id']").val()).addClass("hidden");
     });
   });
-  $(".submit").click(function(e) {
+  $(".submit").on("click", function(e) {
     e.preventDefault();
     var $submit = $(this);
     var $row = $submit.closest("tr");
@@ -46,7 +46,7 @@ $(function() {
         .tooltip('fixTitle');
     });
   });
-  $(".revoke").click(function(e) {
+  $(".revoke").on("click", function(e) {
     e.preventDefault();
     var $revoke = $(this);
     var $row = $revoke.closest("tr");

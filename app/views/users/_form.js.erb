@@ -5,7 +5,7 @@ $(function() {
       $("#user_nickname").val($("#user_first_name").val());
   });
 });
-$("form").submit(ensureValidNumericInputOnSubmit);
+$("form").on("submit", ensureValidNumericInputOnSubmit);
 $("input#user_profile").change(function(e) {
   try {
     var img = document.getElementById("profile_preview");

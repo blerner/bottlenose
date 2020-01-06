@@ -107,7 +107,7 @@
     warning.find("p").removeClass("hidden");
     warning.find("h3").removeClass("hidden");
   }, Math.max(deadline - now, 0));
-  $("form").submit(function(e) {
+  $("form").on("submit", function(e) {
     return ensureValidNumericInputOnSubmit(e, "input.numeric:not([disabled])");
   });
 </script>

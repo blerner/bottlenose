@@ -54,7 +54,7 @@
 </div>
 <script>
   $(".file-picker").each(function(index) { activate_file_picker($(this)); });
-  $("#bulk-entry form").submit(function() {
+  $("#bulk-entry form").on("submit", function() {
     if ($("input[type='file']")[0].files.length == 0) {
       alert("No grades file selected");
       return false;

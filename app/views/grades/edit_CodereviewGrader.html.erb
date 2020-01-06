@@ -107,12 +107,12 @@
 <div class="col-sm-6 text-center">
 <%= f.submit "Submit grade", id: "completed", class: "btn btn-success" %>
 <script>
-  $(".navbar-header a").click(function(e) { 
+  $(".navbar-header a").on("click", function(e) { 
     window.scrollTo(0, $($(this).attr("href"))[0].offsetTop); 
     e.stopPropagation();
     e.preventDefault();
   });
-  $("form").submit(ensureValidNumericInputOnSubmit);
+  $("form").on("submit", ensureValidNumericInputOnSubmit);
 </script>
 </div>
 <% end %><%# form-for %>

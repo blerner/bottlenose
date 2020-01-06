@@ -87,7 +87,7 @@
 <span class="col-sm-12 text-center">
 <%= f.submit "Submit grade", id: "completed", class: "btn btn-success" %>
 </span>
-<script>$("form").submit(ensureValidNumericInputOnSubmit);</script>
+<script>$("form").on("submit", ensureValidNumericInputOnSubmit);</script>
 </div>
 <% end %>
 <% end %>

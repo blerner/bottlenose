@@ -79,7 +79,7 @@ $(function() {
   }
   weights.blur(refresh);
   refresh();
-  $("form").submit(ensureValidNumericInputOnSubmit);
+  $("form").on("submit", ensureValidNumericInputOnSubmit);
 });
 </script>
 

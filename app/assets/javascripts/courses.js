@@ -44,7 +44,7 @@
     function init() {
         enableReflectiveCalls();
         $("span.findUser").each(function(i) { enableLookupUser($(this)); });
-        $(".add-section-button").click(add_section);
+        $(".add-section-button").on("click", add_section);
         $("input.numeric").on("keypress", validateNumericInput);
 
         $('#sections').on('cocoon:after-insert', on_add_section);

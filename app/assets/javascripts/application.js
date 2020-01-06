@@ -10,7 +10,7 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
+//= require jquery3
 //= require jquery-ui/widgets/draggable
 //= require jquery-ui/widgets/resizable
 //= require jquery-ui/widgets/sortable
@@ -47,7 +47,7 @@
 
 
 function enableShowUsernames(elts) {
-  $(elts).click(function(){ 
+  $(elts).on("click", function(){ 
     $(this).toggleClass("active");
     $("#" + $(this).data("target")).toggleClass("showusernames");
   });
@@ -179,7 +179,7 @@ function activate_file_picker($e) {
     $e.find(".remove-custom-file").prop('disabled', false).removeClass("btn-default").addClass("btn-warning");
     $e.find("input.remove-custom-file").val('');
   });
-  $e.find(".remove-custom-file").click(function() {
+  $e.find(".remove-custom-file").on("click", function() {
     $e.find("input.custom-file").replaceWith(
       $e.find("input.custom-file").clone(true));
     $(this).prop('disabled', true).addClass("btn-default").removeClass("btn-warning");
@@ -291,7 +291,7 @@ function activateSpinner(obj, options) {
     input.prop("disabled", false);
     validate();
   });
-  input.bind("paste", function(e) { e.preventDefault(); });
+  input.on("paste", function(e) { e.preventDefault(); });
 
   $(upArrow).on('mousedown', function() {
     if (input.prop("disabled")) return;
@@ -323,7 +323,7 @@ function makeSpinner(options) {
   var input = $("<input>")
       .addClass("form-control numeric")
       .val(options.val || 0)
-      .bind("paste", function(e) { e.preventDefault(); });
+      .on("paste", function(e) { e.preventDefault(); });
   if (options.klass !== undefined)
     input.addClass(options.klass);
   if (options.max !== undefined)   input.data("max", options.max);

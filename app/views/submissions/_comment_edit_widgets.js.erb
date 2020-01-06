@@ -266,7 +266,7 @@ $(function() {
         this.areaComment = $("<div>").lineCommentView(this.options.commentEditor);
       var $expand = $("<span>").addClass("btn btn-alert pull-right").css({padding: "3px"})
           .append($("<span>").addClass("glyphicon glyphicon-edit"))
-          .click((e) => {
+          .on("click", (e) => {
             page = $expand.closest(".page")[0];
             this.element.toggleClass("expanded");
             this.positionEditWidget();
@@ -274,7 +274,7 @@ $(function() {
             return false;
           });
       this.element.append($expand)
-        .click((e) => e.stopPropagation())
+        .on("click", (e) => e.stopPropagation())
         .mousedown((e) => e.stopPropagation());
     },
     _stopResizing: function(e, ui) {

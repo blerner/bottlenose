@@ -65,7 +65,7 @@
 </table>
 <% end %>
 <script>
-  $("form").submit(function() {
+  $("form").on("submit", function() {
     var $form = $(this);
     var $success = $("#" + $form.attr("id").replace('reg', 'success'));
     var $failure = $("#" + $form.attr("id").replace('reg', 'failure'));

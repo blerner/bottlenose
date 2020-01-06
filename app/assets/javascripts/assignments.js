@@ -219,7 +219,7 @@
       }
     });
 
-    $("form").submit(function(e) {
+    $("form").on("submit", function(e) {
       var graderTypeInputs =
           $("li.grader").filter(function(index) {
             return $(this).find("input[id^='assignment_graders_'][id$='_destroy'][value='1']").length == 0;

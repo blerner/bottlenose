@@ -103,7 +103,7 @@ function getGrades($table) {
   });
 
   // Handle the modal dialogs
-  $("#grades-table button.trigger").click(function() {
+  $("#grades-table button.trigger").on("click", function() {
     var $target = $("#enter_grades");
     var $row = $(this).closest("tr");
     var name = $(this).data("name");
@@ -123,7 +123,7 @@ function getGrades($table) {
     $("button.trigger").prop("disabled", false);
     $("#" + $(this).data("row") + " button.trigger").focus();
   });
-  $("button.save").click(function() {
+  $("button.save").on("click", function() {
     var $modal = $(this).closest("div.modal");
     var $row = $("#" + $modal.data("row"));
     var countBlanks = 0;
@@ -164,7 +164,7 @@ function getGrades($table) {
       }
     });
   });
-  $("button.cancel").click(function() {
+  $("button.cancel").on("click", function() {
     $(this).closest("div.modal").modal("hide");
   });
   $('.spinner').each(function() {

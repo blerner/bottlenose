@@ -174,7 +174,7 @@ $(function() {
   // Pre-load page to specific teamsets or students
   var hash = window.location.hash.replace(/#/g, '').split(":");
   if (hash.length == 3) {
-    $("li a[href='#" + hash[0] + "']").click();
+    $("li a[href='#" + hash[0] + "']").trigger("click");
     for (var i = 1; i < 3; i++) {
       hash[i] = (hash[i] || "").split("=");
       if (hash[i].length == 2) {
