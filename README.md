@@ -37,7 +37,7 @@ Some packages are generally good to have, and needed by many future steps in
 the setup process.
 
 ```sh
-sudo apt-get install build-essential git postgresql libpq-dev beanstalkd imagemagick
+sudo apt-get install build-essential git postgresql libpq-dev beanstalkd imagemagick libqt4-dev libqtwebkit-dev pngquant
 ```
 
 After installing beanstalkd, double check that "telnet [server] 11300" doesn't
@@ -55,6 +55,12 @@ using LibreOffice:
 
 ```sh
 sudo apt-get install libreoffice-core libreoffice-base
+```
+
+Finally, we'll need the Chromium browser drivers for use with Capybara:
+
+```sh
+sudo apt install chromium-browser
 ```
 
 Make certain that the following programs are available in your path
