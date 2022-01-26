@@ -1035,10 +1035,12 @@ class Screenshots
       yield
       visit(course_path(@course))
 
+      # NOTE: This code previously included the Stop Impersonating option in the navbar.
+      # This was removed to make the screenshots of the course withdrawal usable for students.
+      course_header = page.find(:xpath, ".//div[@class='page-header']")
       withdraw = page.find(:xpath, ".//button[contains(text(), 'Withdraw from this course')]")
       hilite = highlight_area("withdraw", bbox(withdraw))
-      set_full_page
-      yield
+      yield options: inflate_box(bbox(course_header, hilite), 10, 10, 10, 10)
       remove_highlight "withdraw"
       set_default_size
 
@@ -1048,8 +1050,13 @@ class Screenshots
       yield options: bbox(content)
       set_default_size
       page.find(:xpath, ".//a[contains(@href, 'withdraw')]").click
-      set_full_page
-      yield
+      # We only want to screenshot the withdrawal success message and the course page
+      # post-withdrawal. These are the first two containers from the body tag.
+      withdraw_confirmation_container = 
+        page.find(:xpath, "//body/div[@class='container'][1]")
+      course_info_container = page.find(:xpath, "//body/div[@class='container'][2]")
+      yield options: inflate_box(bbox(withdraw_confirmation_container, course_info_container), 
+                                 5, 5, 5, 5)
       page.find(:xpath, ".//a[text()='Stop Impersonating']").click
       set_full_page
       yield
