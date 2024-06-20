@@ -34,6 +34,14 @@ class CourseSpreadsheet < Spreadsheet
     end
   end
 
+  def late_days_remaining(u)
+    assns = @course.assignments.where("available <= ?", DateTime.current)
+    total_latedays = u.used_submissions_for(assns).to_a.reduce(0) do |acc, s| 
+      acc + s.submission.days_late 
+    end
+    return @course.total_late_days - total_latedays
+  end  
+
   def create_exams(sheet)
     labels, weight = create_name_columns(sheet)
     sheet.freeze_panes(sheet.header_rows.length + 1, labels.length - 2)
@@ -255,6 +263,9 @@ class CourseSpreadsheet < Spreadsheet
     course_section_types.each do |type|
       sheet.columns.push(Col.new("#{type.humanize} section", "Number"))
     end
+    if @course.total_late_days
+      sheet.columns.push(Col.new("Late Days Remaining", "Number"))
+    end 
     sheet.columns.push(Col.new("Withdrawn?", "DateTime"), Col.new(""), Col.new(""))
     labels = sheet.push_header_row(nil, ["", "", "", "", "", "", "", "", "", ""].push(*course_section_types.count.times.map{|| ""}))
     weight = sheet.push_header_row(nil, ["", "", "", "", "", "", "", "", "", ""].push(*course_section_types.count.times.map{|| ""}))
@@ -273,6 +284,9 @@ class CourseSpreadsheet < Spreadsheet
         section = reg[Section::types[type]]&.fetch(:section)
         row.push(section&.crn || "<no CRN>")
       end
+      if @course.total_late_days
+        row.push(late_days_remaining(u) || "")
+      end 
       row.push(lecture&.dig(:dropped_date) || "", "", "")
       sheet.push_row(nil, row)
     end
