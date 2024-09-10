@@ -1,5 +1,5 @@
 class JsonParser
-  attr_reader :json, :test_count, :tests, :commentary, :passed_count, :time_taken, :output
+  attr_reader :json, :test_count, :tests, :commentary, :passed_count, :time_taken, :output, :errors
   attr_reader :filename
   attr_reader :score, :max_score
 
@@ -8,6 +8,7 @@ class JsonParser
     @json = json
     @test_count = json['tests']&.count
     @output = json['output']
+    @errors = json['errors']
     @tests = json['tests']&.map&.with_index do |t, num|
       t = t.clone
       weight = t.delete('weight') || t.delete('max_score') || t.delete('max-score')
