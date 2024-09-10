@@ -81,7 +81,7 @@ module Api
         errors = params[:errors] || []
         output = params[:output]
         {
-          key: JSON.parse(key, { max_nesting: 1, create_additons: false }),
+          key: JSON.parse(key, { max_nesting: 1, create_additions: false }),
           shell_responses: shell_responses,
           output: output,
           errors: errors
