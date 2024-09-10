@@ -1,6 +1,24 @@
 <div id="tests">
   <% if @tests.nil? %>
-  <pre><%= @grading_output.output %></pre>
+    <% if @grading_output.output %>
+      <h4>Output:</h4>
+      <pre><%= @grading_output.output %></pre>
+    <% end %>
+    <% if @grading_output.errors %>
+      <h4>Errors:</h4>
+      <% if @grading_output.errors.is_a? String %>
+      <pre><%= @grading_output.errors %></pre>
+      <% else %>
+      <ul>
+        <% @grading_output.errors.each do |e| %>
+        <li><pre><%= e %></pre></li>
+        <% end %>
+      </ul>
+      <% end %>
+    <% end %>
+    <% if @grading_output.errors.blank? && @grading_output.output.blank? %>
+    <h4>No output or errors received at all.  Please contact a professor.</h4>
+    <% end %>
   <% else %>
   <% @tests.each_with_index do |t, i| %>
     <% if t[:passed]
