@@ -89,7 +89,7 @@ class Upload < ApplicationRecord
   end
 
   def url
-    "#{Settings['site_url']}#{path}"
+    "#{Settings['site_url']}#{Addressable::URI.encode_component(path, Addressable::URI::CharacterClasses::PATH)}"
   end
 
   def upload_data=(upload)
